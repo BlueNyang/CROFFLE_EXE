@@ -2,35 +2,26 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Croffle"
-!define PRODUCT_VERSION "1.0.0"
+!define PRODUCT_VERSION "1.0.0.4"
 !define PRODUCT_PUBLISHER "Croffle Dev."
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Croffle.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
-!define PRODUCT_STARTMENU_REGVAL "NSIS:StartMenuDir"
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
 
 ; MUI Settings
 !define MUI_ABORTWARNING
-!define MUI_ICON "..\Croffle\Icon\croffle.ico"
-!define MUI_UNICON "..\Croffle\Icon\croffle.ico"
+!define MUI_ICON "..\..\CROFFLE_BUILD\Croffle\Icon\croffle.ico"
+!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
-!insertmacro MUI_PAGE_LICENSE "..\LICENSE.txt"
+!insertmacro MUI_PAGE_LICENSE "..\..\CROFFLE_BUILD\LICENSE.txt"
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
-; Start menu page
-var ICONS_GROUP
-!define MUI_STARTMENUPAGE_NODISABLE
-!define MUI_STARTMENUPAGE_DEFAULTFOLDER "Croffle"
-!define MUI_STARTMENUPAGE_REGISTRY_ROOT "${PRODUCT_UNINST_ROOT_KEY}"
-!define MUI_STARTMENUPAGE_REGISTRY_KEY "${PRODUCT_UNINST_KEY}"
-!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "${PRODUCT_STARTMENU_REGVAL}"
-!insertmacro MUI_PAGE_STARTMENU Application $ICONS_GROUP
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
@@ -53,50 +44,40 @@ ShowInstDetails show
 ShowUnInstDetails show
 
 Section "MainSection" SEC01
-  SetOutPath "$INSTDIR\"
+  SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File "..\Croffle\bin\Release\Croffle.exe.config"
-  File "..\Croffle\bin\Release\Croffle.exe"
-
-; Shortcuts
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-  CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Croffle.lnk" "$INSTDIR\Croffle.exe"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\Croffle.pdb"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\Croffle.exe.config"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\Croffle.exe"
+  CreateDirectory "$SMPROGRAMS\Croffle"
+  CreateShortCut "$SMPROGRAMS\Croffle\Croffle.lnk" "$INSTDIR\Croffle.exe"
   CreateShortCut "$DESKTOP\Croffle.lnk" "$INSTDIR\Croffle.exe"
-  !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
-Section "Sub" SEC02
+Section "SubSection" SEC02
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\Tulpep.NotificationWindow.dll"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\System.Data.SQLite.xml"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\System.Data.SQLite.Linq.dll"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\System.Data.SQLite.EF6.dll"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\System.Data.SQLite.dll"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\Newtonsoft.Json.xml"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\Newtonsoft.Json.dll"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\HtmlAgilityPack.xml"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\HtmlAgilityPack.pdb"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\HtmlAgilityPack.dll"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\EntityFramework.xml"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\EntityFramework.SqlServer.xml"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\EntityFramework.SqlServer.dll"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\EntityFramework.dll"
   SetOutPath "$INSTDIR\x86"
-  SetOverwrite try
-  File "..\Croffle\bin\Release\x86\SQLite.Interop.dll"
-  File "..\Croffle\bin\Release\x86\sqlite3.dll"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\x86\SQLite.Interop.dll"
   SetOutPath "$INSTDIR\x64"
-  File "..\Croffle\bin\Release\x64\SQLite.Interop.dll"
-  File "..\Croffle\bin\Release\x64\sqlite3.dll"
-  SetOutPath "$INSTDIR\"
-  SetOverwrite ifnewer
-  File "..\Croffle\bin\Release\Tulpep.NotificationWindow.dll"
-  File "..\Croffle\bin\Release\System.Data.SQLite.xml"
-  File "..\Croffle\bin\Release\System.Data.SQLite.Linq.dll"
-  File "..\Croffle\bin\Release\System.Data.SQLite.EF6.dll"
-  File "..\Croffle\bin\Release\System.Data.SQLite.dll"
-  File "..\Croffle\bin\Release\Newtonsoft.Json.xml"
-  File "..\Croffle\bin\Release\Newtonsoft.Json.dll"
-  File "..\Croffle\bin\Release\HtmlAgilityPack.xml"
-  File "..\Croffle\bin\Release\HtmlAgilityPack.pdb"
-  File "..\Croffle\bin\Release\HtmlAgilityPack.dll"
-  File "..\Croffle\bin\Release\EntityFramework.xml"
-  File "..\Croffle\bin\Release\EntityFramework.SqlServer.xml"
-  File "..\Croffle\bin\Release\EntityFramework.SqlServer.dll"
-  File "..\Croffle\bin\Release\EntityFramework.dll"
-  File "..\Croffle\bin\Release\Croffle.pdb"
-  File "..\Croffle\bin\Release\Croffle.exe.manifest"
-  File "..\Croffle\bin\Release\Croffle.application"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\x64\SQLite.Interop.dll"
+SectionEnd
 
-; Shortcuts
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-  !insertmacro MUI_STARTMENU_WRITE_END
+Section -AdditionalIcons
+  SetOutPath $INSTDIR
+  CreateShortCut "$SMPROGRAMS\Croffle\Uninstall.lnk" "$INSTDIR\uninst.exe"
 SectionEnd
 
 Section -Post
@@ -121,11 +102,9 @@ Function un.onInit
 FunctionEnd
 
 Section Uninstall
-  !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
   Delete "$INSTDIR\uninst.exe"
-  Delete "$INSTDIR\Croffle.application"
-  Delete "$INSTDIR\Croffle.exe.manifest"
-  Delete "$INSTDIR\Croffle.pdb"
+  Delete "$INSTDIR\x64\SQLite.Interop.dll"
+  Delete "$INSTDIR\x86\SQLite.Interop.dll"
   Delete "$INSTDIR\EntityFramework.dll"
   Delete "$INSTDIR\EntityFramework.SqlServer.dll"
   Delete "$INSTDIR\EntityFramework.SqlServer.xml"
@@ -140,20 +119,18 @@ Section Uninstall
   Delete "$INSTDIR\System.Data.SQLite.Linq.dll"
   Delete "$INSTDIR\System.Data.SQLite.xml"
   Delete "$INSTDIR\Tulpep.NotificationWindow.dll"
-  Delete "$INSTDIR\x64\sqlite3.dll"
-  Delete "$INSTDIR\x64\SQLite.Interop.dll"
-  Delete "$INSTDIR\x86\sqlite3.dll"
-  Delete "$INSTDIR\x86\SQLite.Interop.dll"
   Delete "$INSTDIR\Croffle.exe"
   Delete "$INSTDIR\Croffle.exe.config"
+  Delete "$INSTDIR\Croffle.pdb"
 
+  Delete "$SMPROGRAMS\Croffle\Uninstall.lnk"
   Delete "$DESKTOP\Croffle.lnk"
-  Delete "$SMPROGRAMS\$ICONS_GROUP\Croffle.lnk"
+  Delete "$SMPROGRAMS\Croffle\Croffle.lnk"
 
-  RMDir "$SMPROGRAMS\$ICONS_GROUP"
+  RMDir "$SMPROGRAMS\Croffle"
   RMDir "$INSTDIR\x86"
   RMDir "$INSTDIR\x64"
-  RMDir "$INSTDIR\"
+  RMDir "$INSTDIR"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
