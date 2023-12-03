@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Croffle"
-!define PRODUCT_VERSION "1.0.0.4"
+!define PRODUCT_VERSION "1.0.0.6"
 !define PRODUCT_PUBLISHER "Croffle Dev."
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Croffle.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -14,7 +14,7 @@
 ; MUI Settings
 !define MUI_ABORTWARNING
 !define MUI_ICON "..\..\CROFFLE_BUILD\Croffle\Icon\croffle.ico"
-!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
+!define MUI_UNICON "..\..\CROFFLE_BUILD\Croffle\Icon\croffle.ico"
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
@@ -54,7 +54,7 @@ Section "MainSection" SEC01
   CreateShortCut "$DESKTOP\Croffle.lnk" "$INSTDIR\Croffle.exe"
 SectionEnd
 
-Section "SubSection" SEC02
+Section "dll" SEC02
   File "..\..\CROFFLE_BUILD\Croffle\bin\Release\Tulpep.NotificationWindow.dll"
   File "..\..\CROFFLE_BUILD\Croffle\bin\Release\System.Data.SQLite.xml"
   File "..\..\CROFFLE_BUILD\Croffle\bin\Release\System.Data.SQLite.Linq.dll"
@@ -69,10 +69,19 @@ Section "SubSection" SEC02
   File "..\..\CROFFLE_BUILD\Croffle\bin\Release\EntityFramework.SqlServer.xml"
   File "..\..\CROFFLE_BUILD\Croffle\bin\Release\EntityFramework.SqlServer.dll"
   File "..\..\CROFFLE_BUILD\Croffle\bin\Release\EntityFramework.dll"
-  SetOutPath "$INSTDIR\x86"
-  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\x86\SQLite.Interop.dll"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\Croffle.exe.manifest"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\Croffle.application"
+SectionEnd
+
+Section "db" SEC03
   SetOutPath "$INSTDIR\x64"
   File "..\..\CROFFLE_BUILD\Croffle\bin\Release\x64\SQLite.Interop.dll"
+  SetOutPath "$INSTDIR\x86"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\x86\SQLite.Interop.dll"
+  SetOutPath "$INSTDIR\app.publish"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\app.publish\Croffle.exe"
+  SetOutPath "$INSTDIR\DB"
+  File "..\..\CROFFLE_BUILD\Croffle\bin\Release\DB\sqlitedb.sqlite"
 SectionEnd
 
 Section -AdditionalIcons
@@ -103,8 +112,12 @@ FunctionEnd
 
 Section Uninstall
   Delete "$INSTDIR\uninst.exe"
-  Delete "$INSTDIR\x64\SQLite.Interop.dll"
+  Delete "$INSTDIR\DB\sqlitedb.sqlite"
+  Delete "$INSTDIR\app.publish\Croffle.exe"
   Delete "$INSTDIR\x86\SQLite.Interop.dll"
+  Delete "$INSTDIR\x64\SQLite.Interop.dll"
+  Delete "$INSTDIR\Croffle.application"
+  Delete "$INSTDIR\Croffle.exe.manifest"
   Delete "$INSTDIR\EntityFramework.dll"
   Delete "$INSTDIR\EntityFramework.SqlServer.dll"
   Delete "$INSTDIR\EntityFramework.SqlServer.xml"
@@ -130,6 +143,8 @@ Section Uninstall
   RMDir "$SMPROGRAMS\Croffle"
   RMDir "$INSTDIR\x86"
   RMDir "$INSTDIR\x64"
+  RMDir "$INSTDIR\DB"
+  RMDir "$INSTDIR\app.publish"
   RMDir "$INSTDIR"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
